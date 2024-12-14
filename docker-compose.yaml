@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: "wms"
+      POSTGRES_PASSWORD: "wms"
+      POSTGRES_DB: "wms"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - wms_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 1234
+    ports:
+      - "80:80"
+    networks:
+      - wms_network
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+
+networks:
+  wms_network:
+    driver: bridge
